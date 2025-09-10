@@ -1,6 +1,7 @@
 - This project is called DjangoTest.
 
-- dependencies:
+- before you begin:
+  - be sure to run `pip install -r requirements.txt` to download the necessary requirements to run this program
 
 
 - To start the server, navigate to the DjangoTest/ folder in Powershell and run `Python manage.py runserver`
