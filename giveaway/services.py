@@ -9,7 +9,7 @@ def has_won_in_the_last_30_days(user):
     thirty_days_ago = timezone.now() - timedelta(days=30)
     return Winner.objects.filter(
         entry__user=user, selected_date__gte=thirty_days_ago,
-        replaced_by_isnull=True
+        replaced_by__isnull=True
     ).exists()
 
 def pick_winner_for_giveaway(giveaway):
