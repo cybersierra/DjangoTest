@@ -1,3 +1,5 @@
+#next up: finish migrations/models.py
+
 - This project is called DjangoTest.
 
 - before you begin:
