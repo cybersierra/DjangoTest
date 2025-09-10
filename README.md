@@ -12,6 +12,7 @@
 
 - This project has the following applications:
   - giveaway
+  - the data models here cover the giveaways themselves
     - data models (models.py):
       - giveaway - start/end dateed, title, terms, etc
       - entry - user entering a giveaway

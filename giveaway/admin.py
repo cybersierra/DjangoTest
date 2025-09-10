@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Giveaway, Prize, Entry, Winner
 
+# In this file, we create the admin interface
+
+
 # Register your models here.
 # this is the admin interface for the Giveaway model
 @admin.register(Giveaway)   # this is a decorator which adds the model to the admin site without changing the model itself
