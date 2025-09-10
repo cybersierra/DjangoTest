@@ -13,7 +13,7 @@ class GiveawayAdmin(admin.ModelAdmin):
 @admin.register(Prize)
 class PrizeAdmin(admin.ModelAdmin):
     list_display = ('name', 'giveaway', 'quantity', 'alert_threshold', 'is_low_stock')
-    list_fiter = ('giveaway',)
+    list_filter = ('giveaway',)
 
     def is_low_stock(self, obj):
         return obj.is_low_stock()
@@ -22,7 +22,7 @@ class PrizeAdmin(admin.ModelAdmin):
 # this is the admin interface for the Entry model
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'giveaway', 'phone_numbner', 'date_of_birth', 'created_at')
+    list_display = ('user', 'giveaway', 'phone_number', 'date_of_birth', 'created_at')
     search_fields = ('user__username', 'phone_number')
     list_filter = ('giveaway', 'created_at')
 
@@ -30,5 +30,5 @@ class EntryAdmin(admin.ModelAdmin):
 @admin.register(Winner)
 class WinnerAdmin(admin.ModelAdmin):
     list_display = ('entry', 'prize', 'selected_date', 'prize_status', 'prize_claimed')
-    list_filter = ('giveaway', 'created_at')
+    list_filter = ('selected_date', 'prize_status', 'prize_claimed')
     search_fields = ('entry__user__username',)
