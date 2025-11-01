@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Giveaway, Prize, Entry, Winner
+from .models import Giveaway, Prize, Entry, Station, Winner
 
 # In this file, we create the admin interface
 
@@ -10,7 +10,7 @@ from .models import Giveaway, Prize, Entry, Winner
 class GiveawayAdmin(admin.ModelAdmin):
     list_display = ('title', 'start_date', 'end_date', 'giveaway_type', 'station')
     search_fields = ('title', 'description', 'station')
-    list_filter = ('start_date', 'end_date')
+    list_filter = ('station', 'giveaway_type', 'start_date', 'end_date')
 
 # this is the admin interface for the Prize model
 @admin.register(Prize)
@@ -27,7 +27,8 @@ class PrizeAdmin(admin.ModelAdmin):
 class EntryAdmin(admin.ModelAdmin):
     list_display = ('user', 'giveaway', 'phone_number', 'date_of_birth', 'created_at')
     search_fields = ('user__username', 'phone_number')
-    list_filter = ('giveaway', 'created_at')
+    list_filter = ('giveaway__station', 'giveaway__giveaway_type', 'giveaway__start_date', 'giveaway__end_date')
+    list_select_related = ('giveaway__station',)
 
 # this is the admin interface for the Winner model
 @admin.register(Winner)
@@ -35,3 +36,10 @@ class WinnerAdmin(admin.ModelAdmin):
     list_display = ('entry', 'prize', 'selected_date', 'prize_status', 'prize_claimed')
     list_filter = ('selected_date', 'prize_status', 'prize_claimed')
     search_fields = ('entry__user__username',)
+
+# this is the admin interface for the Station model
+@admin.register(Station)
+class StationAdmin(admin.ModelAdmin):
+    list_display = ("name", "code")
+    search_fields = ("name", "code", "market", "contact_email")
+    ordering = ("name",)

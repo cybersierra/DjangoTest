@@ -11,7 +11,15 @@ class Giveaway(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     giveaway_type = models.CharField(max_length=100, blank=True)    # not sure what this will be used for, but it might be useful
-    station = models.CharField(max_length=100, blank=True)
+
+    # foreign key to link giveaways to stations, this allows us to easily find all giveaways for a station and also to filter giveaways by station in the admin interface
+    station = models.ForeignKey(
+        "giveaway.Station",         # which model the foreign key connects to
+        on_delete=models.CASCADE,
+        related_name="giveaways",   # if this station is deleted, so are the associated giveaways
+        null = True,
+        blank = True,
+    )
 
     def __str__(self):  # if you print an object of this class, you'll see the title
         return self.title
@@ -75,3 +83,23 @@ class Winner(models.Model):
     # when printing a Winner object, show the username and giveaway title
     def __str__(self):
         return f"Winner: {self.entry.user.username} ({self.entry.giveaway.title})"
+    
+# model for stations
+class Station(models.Model):
+    # basic stuff
+    name = models.CharField(max_length=100, unique=True)    # like 98.5 FM
+    code = models.CharField(max_length=20, unique=True)     # like KISS
+
+    # auditing purposes
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["code"]),
+        ]
+
+    def __str__(self):
+        return f"{self.name} ({self.code})"
