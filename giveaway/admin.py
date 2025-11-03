@@ -17,9 +17,10 @@ class GiveawayAdmin(admin.ModelAdmin):
 class PrizeAdmin(admin.ModelAdmin):
     list_display = ('name', 'giveaway', 'quantity', 'alert_threshold', 'is_low_stock')
     list_filter = ('giveaway',)
+    search_fields = ('name', 'giveaway__title')
 
     def is_low_stock(self, obj):
-        return obj.is_low_stock()
+        return obj.is_low_stock
     is_low_stock.boolean = True
 
 # this is the admin interface for the Entry model
@@ -33,9 +34,18 @@ class EntryAdmin(admin.ModelAdmin):
 # this is the admin interface for the Winner model
 @admin.register(Winner)
 class WinnerAdmin(admin.ModelAdmin):
-    list_display = ('entry', 'prize', 'selected_date', 'prize_status', 'prize_claimed')
+    list_display = ('entry_user', 'giveaway', 'prize', 'prize_status',  'selected_date', 'prize_claimed', 'replaced_by')
     list_filter = ('selected_date', 'prize_status', 'prize_claimed')
     search_fields = ('entry__user__username',)
+    list_search_related = ('entry', 'prize')
+
+    @admin.display(ordering="entry__user__username", description="Winner")
+    def entry_user(self, obj):
+        return obj.entry.user.username
+    
+    @admin.display(description="Giveaway")
+    def giveaway(self, obj):
+        return obj.entry.giveaway.title
 
 # this is the admin interface for the Station model
 @admin.register(Station)

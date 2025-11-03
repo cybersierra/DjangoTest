@@ -62,10 +62,26 @@ class Entry(models.Model):
         age = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
         return age >= 18
 
+# model for prizes
+class Prize(models.Model):
+    giveaway = models.OneToOneField("giveaway.Giveaway", on_delete=models.CASCADE, related_name='prize') # link to Giveaway model
+    name = models.CharField(max_length=255)
+    quantity = models.PositiveIntegerField(default=1)
+    alert_threshold = models.PositiveIntegerField(default=1) # if the quantity gets this low, an alert is sent
+    claimed = models.BooleanField(default=False) # whether the prize has been claimed or not
+    claimed_at = models.DateTimeField(null=True, blank=True) # when the prize was claimed
+
+    def __str__(self):
+        return f"{self.name} ({self.quantity} remaining)" # low quantity alert
+    
+    @property
+    def is_low_stock(self):
+        return self.quantity <= self.alert_threshold    # function to check if the prize quantity is low
+
 # model for winners
 class Winner(models.Model):
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='winner') # link to Entry model
-    prize = models.ForeignKey(Prize, on_delete=models.SET_NULL, null=True, blank=True) # link to Prize model (using SET_NULL to keep winner record if prize is deleted)
+    prize = models.OneToOneField("giveaway.Prize", on_delete=models.SET_NULL, null=True, blank=True, related_name='winner') # link to Prize model (using SET_NULL to keep winner record if prize is deleted)
     selected_date = models.DateTimeField(auto_now_add=True)
     prize_claimed = models.BooleanField(default=False)
     prize_claimed_at = models.DateTimeField(null=True, blank=True)
@@ -103,3 +119,4 @@ class Station(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.code})"
+    

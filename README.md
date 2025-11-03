@@ -1,4 +1,4 @@
-#next up: finish migrations/models.py
+#next up: admin + logic enhancement for Winners (check chat)
 
 - This project is called DjangoTest.
 
